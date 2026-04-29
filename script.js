@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Mock API call to save config
-            const response = await fetch('/api/config', {
+            const response = await fetch('https://wabot-b.onrender.com/api/config', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
