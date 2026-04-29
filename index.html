@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interakt Bot Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="container glass-panel">
+        <header>
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <h1>WhatsApp Bot Dashboard</h1>
+            </div>
+            <div class="status">
+                <span class="status-indicator active"></span>
+                <span>Bot Active</span>
+            </div>
+        </header>
+
+        <main>
+            <section class="card">
+                <h2>Interakt Configuration</h2>
+                <p class="subtitle">Connect your Interakt account to enable WhatsApp automation.</p>
+                
+                <form id="configForm">
+                    <div class="form-group">
+                        <label for="apiKey">Interakt API Key</label>
+                        <input type="password" id="apiKey" placeholder="Enter your Base64 Encoded API Key" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Webhook URL (Copy this to Interakt Dashboard)</label>
+                        <div class="copy-field">
+                            <input type="text" id="webhookUrl" value="http://your-domain.com/webhook/interakt" readonly>
+                            <button type="button" id="copyBtn" class="btn-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Configuration</button>
+                </form>
+                <div id="alertMessage" class="alert hidden"></div>
+            </section>
+
+            <section class="card auto-replies">
+                <div class="card-header">
+                    <h2>Auto-Reply Rules</h2>
+                    <button class="btn-secondary btn-sm" id="addRuleBtn">+ Add Rule</button>
+                </div>
+                
+                <div class="rules-list">
+                    <div class="rule-item">
+                        <div class="rule-content">
+                            <span class="keyword">"hello", "hi"</span>
+                            <span class="arrow">→</span>
+                            <span class="reply">"Hi there! How can I assist you today?"</span>
+                        </div>
+                        <button class="btn-icon-danger">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                    <div class="rule-item">
+                        <div class="rule-content">
+                            <span class="keyword">"pricing"</span>
+                            <span class="arrow">→</span>
+                            <span class="reply">"Our pricing starts at $9.99/month..."</span>
+                        </div>
+                        <button class="btn-icon-danger">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
