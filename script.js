@@ -1,8 +1,15 @@
+// ========== BACKEND URL ==========
+const BASE_URL = 'https://wabot-b.onrender.com';
+// ==================================
+
 document.addEventListener('DOMContentLoaded', () => {
     const configForm = document.getElementById('configForm');
     const copyBtn = document.getElementById('copyBtn');
     const webhookUrl = document.getElementById('webhookUrl');
     const alertMessage = document.getElementById('alertMessage');
+
+    // Set webhook URL dynamically from BASE_URL
+    webhookUrl.value = `${BASE_URL}/webhook/interakt`;
 
     // Handle Copy Webhook URL
     copyBtn.addEventListener('click', () => {
@@ -38,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Mock API call to save config
-            const response = await fetch('https://wabot-b.onrender.com/api/config', {
+            const response = await fetch(`${BASE_URL}/api/config`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
