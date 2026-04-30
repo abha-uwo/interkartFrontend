@@ -1,6 +1,4 @@
-// ========== BACKEND URL ==========
 const BASE_URL = 'https://wabot-b.onrender.com';
-// ==================================
 
 document.addEventListener('DOMContentLoaded', () => {
     const configForm = document.getElementById('configForm');
