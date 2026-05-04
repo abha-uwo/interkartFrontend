@@ -20,8 +20,8 @@
 
         <form id="loginForm">
             <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="loginUsername" placeholder="Enter your username" required>
+                <label>Email ID</label>
+                <input type="email" id="loginUsername" placeholder="name@company.com" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
@@ -44,7 +44,7 @@
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
             </div>
             <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em;">Get Started</h2>
-            <p style="color: var(--text-muted); margin-top: 0.5rem;">Join the WhatsApp Automation platform</p>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Verify your email to join</p>
         </div>
 
         <form id="registerForm">
@@ -53,15 +53,22 @@
                 <input type="text" id="regName" placeholder="Acme Inc." required>
             </div>
             <div class="form-group">
-                <label>Username</label>
-                <input type="text" id="regUsername" placeholder="choose a username" required>
+                <label>Email ID</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="email" id="regUsername" placeholder="name@company.com" required style="flex: 1;">
+                    <button type="button" onclick="sendOTP()" id="otpBtn" class="btn btn-secondary" style="padding: 0 1rem; font-size: 0.75rem; white-space: nowrap;">Send OTP</button>
+                </div>
+            </div>
+            <div class="form-group hidden" id="otpGroup">
+                <label>Enter OTP</label>
+                <input type="text" id="regOtp" placeholder="6-digit code">
             </div>
             <div class="form-group">
                 <label>Password</label>
                 <input type="password" id="regPassword" placeholder="••••••••" required>
             </div>
             <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.875rem;">
-                Create Account
+                Complete Registration
             </button>
         </form>
         
@@ -77,6 +84,41 @@
             document.getElementById('loginBox').classList.toggle('hidden');
             document.getElementById('registerBox').classList.toggle('hidden');
         }
+
+        window.sendOTP = async () => {
+            const email = document.getElementById('regUsername').value;
+            if (!email) return alert('Please enter your email first');
+
+            const btn = document.getElementById('otpBtn');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${BASE_URL}/api/auth/send-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                if (res.ok) {
+                    alert('OTP sent to your email!');
+                    document.getElementById('otpGroup').classList.remove('hidden');
+                    btn.textContent = 'Resend OTP';
+                    
+                    // Countdown to re-enable
+                    setTimeout(() => { btn.disabled = false; }, 30000);
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to send OTP');
+                    btn.disabled = false;
+                    btn.textContent = 'Send OTP';
+                }
+            } catch (err) {
+                alert('Connection error. Is the server running?');
+                btn.disabled = false;
+                btn.textContent = 'Send OTP';
+            }
+        };
 
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
@@ -113,12 +155,15 @@
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regUsername').value;
             const password = document.getElementById('regPassword').value;
+            const otp = document.getElementById('regOtp').value;
+
+            if (!otp) return alert('Please verify your email with OTP first');
 
             try {
                 const res = await fetch(`${BASE_URL}/api/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
+                    body: JSON.stringify({ name, email, password, otp })
                 });
 
                 const data = await res.json();
