@@ -74,12 +74,37 @@ function renderTickets(tickets) {
         return;
     }
     list.innerHTML = tickets.map(t => `
-        <div class="ticket-item ${t.id === currentTicketId ? 'active' : ''}" onclick="selectTicket('${t.id}')" style="padding: 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s;">
-            <div style="font-weight: 700;">${t.clientName}</div>
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Last update: ${new Date(t.lastUpdate).toLocaleTimeString()}</div>
+        <div class="ticket-item ${t.id === currentTicketId ? 'active' : ''}" onclick="selectTicket('${t.id}')" style="padding: 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s; position: relative;">
+            <div style="font-weight: 700; color: var(--text-main); margin-bottom: 4px;">${t.clientName}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Last update: ${new Date(t.lastUpdate).toLocaleTimeString()}</div>
+            
+            <button onclick="event.stopPropagation(); deleteTicket('${t.id}')" 
+                    style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s;"
+                    onmouseover="this.style.color='var(--danger)'; this.style.background='#fff1f1'"
+                    onmouseout="this.style.color='var(--text-muted)'; this.style.background='none'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
         </div>
     `).join('');
 }
+
+window.deleteTicket = async (clientId) => {
+    if (!confirm('Are you sure you want to delete this support ticket and all messages?')) return;
+    try {
+        const res = await fetch(`${BASE_URL}/api/support/tickets/${clientId}`, { method: 'DELETE' });
+        if (res.ok) {
+            if (currentTicketId === clientId) {
+                currentTicketId = null;
+                document.getElementById('adminChatMessages').innerHTML = '<p style="text-align: center; color: var(--text-muted);">Choose a client from the left to start chatting.</p>';
+                document.getElementById('chatHeaderName').textContent = 'Select a ticket';
+                document.getElementById('adminReplyArea').classList.add('hidden');
+            }
+            loadAllData();
+        }
+    } catch (err) {
+        console.error('Error deleting ticket:', err);
+    }
+};
 
 window.selectTicket = async (id) => {
     currentTicketId = id;
