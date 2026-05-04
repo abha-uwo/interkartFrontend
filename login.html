@@ -86,12 +86,19 @@
         }
 
         window.sendOTP = async () => {
-            const email = document.getElementById('regUsername').value;
+            const emailInput = document.getElementById('regUsername');
+            const email = emailInput.value.trim();
             if (!email) return alert('Please enter your email first');
+            if (!email.includes('@')) return alert('Please enter a valid email');
 
             const btn = document.getElementById('otpBtn');
+            const originalText = btn.textContent;
+            
+            // Disable button and show loading state
             btn.textContent = 'Sending...';
             btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.style.cursor = 'not-allowed';
 
             try {
                 const res = await fetch(`${BASE_URL}/api/auth/send-otp`, {
@@ -100,23 +107,45 @@
                     body: JSON.stringify({ email })
                 });
 
+                const data = await res.json();
+
                 if (res.ok) {
                     alert('OTP sent to your email!');
                     document.getElementById('otpGroup').classList.remove('hidden');
-                    btn.textContent = 'Resend OTP';
                     
                     // Countdown to re-enable
-                    setTimeout(() => { btn.disabled = false; }, 30000);
+                    let seconds = 60; // Increased to 60s for better UX
+                    btn.disabled = true;
+                    btn.classList.add('btn-disabled'); // Add a class for styling if needed
+                    
+                    const timer = setInterval(() => {
+                        seconds--;
+                        if (seconds <= 0) {
+                            clearInterval(timer);
+                            btn.disabled = false;
+                            btn.classList.remove('btn-disabled');
+                            btn.textContent = 'Resend OTP';
+                            btn.style.opacity = '1';
+                            btn.style.cursor = 'pointer';
+                        } else {
+                            btn.textContent = `Wait ${seconds}s`;
+                        }
+                    }, 1000);
                 } else {
-                    const data = await res.json();
-                    alert(data.error || 'Failed to send OTP');
+                    const errorMsg = data.details ? `Error: ${data.error}\nDetails: ${data.details}` : (data.error || 'Failed to send OTP.');
+                    alert(errorMsg);
                     btn.disabled = false;
-                    btn.textContent = 'Send OTP';
+                    btn.textContent = originalText;
+                    btn.style.opacity = '1';
+                    btn.style.cursor = 'pointer';
                 }
             } catch (err) {
-                alert('Connection error. Is the server running?');
+                console.error('OTP Error:', err);
+                alert('Connection error. Please check if the backend server is live at: ' + BASE_URL);
                 btn.disabled = false;
-                btn.textContent = 'Send OTP';
+                btn.textContent = originalText;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
             }
         };
 
