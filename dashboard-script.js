@@ -1,3 +1,5 @@
+const BASE_URL = 'https://wabot-b.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
     const clientId = localStorage.getItem('clientId');
     const clientName = localStorage.getItem('clientName');
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Support System
     async function loadSupportMessages() {
         try {
-            const res = await fetch(`/api/client/${clientId}/support`);
+            const res = await fetch(`${BASE_URL}/api/client/${clientId}/support`);
             const data = await res.json();
             renderSupportMessages(data.messages || []);
         } catch (err) { console.error('Error loading support:', err); }
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!message) return;
 
         try {
-            const res = await fetch('/api/support/send', {
+            const res = await fetch(`${BASE_URL}/api/support/send`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ clientId, clientName, message })
@@ -119,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadClientData() {
         try {
-            const response = await fetch(`/api/client/${clientId}`);
+            const response = await fetch(`${BASE_URL}/api/client/${clientId}`);
             const data = await response.json();
 
             whatsappInput.value = data.whatsappNumber || '';
@@ -159,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData();
         formData.append('logo', e.target.files[0]);
 
-        const res = await fetch(`/api/client/${clientId}/upload-logo`, {
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/upload-logo`, {
             method: 'POST',
             body: formData
         });
@@ -173,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('profileUpdateForm').onsubmit = async (e) => {
         e.preventDefault();
         const newName = document.getElementById('profileDisplayName').value;
-        const res = await fetch(`/api/client/${clientId}/update-profile`, {
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/update-profile`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name: newName })
@@ -188,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.deleteWhatsApp = async () => {
         if (!confirm('Are you sure you want to remove your WhatsApp integration? This will stop the bot.')) return;
-        const res = await fetch(`/api/client/${clientId}/delete-whatsapp`, { method: 'POST' });
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/delete-whatsapp`, { method: 'POST' });
         if (res.ok) {
             alert('WhatsApp integration removed.');
             loadClientData();
@@ -197,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.deactivateAccount = async () => {
         if (!confirm('WARNING: This will permanently deactivate your account and log you out. Continue?')) return;
-        const res = await fetch(`/api/client/${clientId}/deactivate`, { method: 'POST' });
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/deactivate`, { method: 'POST' });
         if (res.ok) {
             alert('Account deactivated.');
             logout();
@@ -263,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         toggleBtn.onclick = async () => {
             const newState = !data.botEnabled;
-            const res = await fetch(`/api/client/${clientId}/toggle-bot`, {
+            const res = await fetch(`${BASE_URL}/api/client/${clientId}/toggle-bot`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ enabled: newState })
@@ -297,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('botConfigForm').onsubmit = async (e) => {
         e.preventDefault();
-        const res = await fetch(`/api/client/${clientId}/config`, {
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/config`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -317,7 +319,7 @@ document.addEventListener('DOMContentLoaded', () => {
         formData.append('file', fileInput.files[0]);
         
         try {
-            const res = await fetch(`/api/client/${clientId}/upload`, { method: 'POST', body: formData });
+            const res = await fetch(`${BASE_URL}/api/client/${clientId}/upload`, { method: 'POST', body: formData });
             const data = await res.json();
             
             if (res.ok) {
@@ -335,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.deleteDoc = async (filename) => {
         if (!confirm(`Delete ${filename}?`)) return;
-        const res = await fetch(`/api/client/${clientId}/documents/${filename}`, { method: 'DELETE' });
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/documents/${filename}`, { method: 'DELETE' });
         if (res.ok) loadClientData();
     };
 

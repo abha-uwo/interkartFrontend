@@ -1,3 +1,5 @@
+const BASE_URL = 'https://wabot-b.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
     loadAllData();
 });
@@ -55,7 +57,7 @@ async function loadAllData() {
 // Support Logic
 async function loadSupportTickets() {
     try {
-        const res = await fetch('/api/admin/support/tickets');
+        const res = await fetch(`${BASE_URL}/api/admin/support/tickets`);
         const tickets = await res.json();
         renderTickets(tickets);
         if (currentTicketId) {
@@ -81,7 +83,7 @@ function renderTickets(tickets) {
 
 window.selectTicket = async (id) => {
     currentTicketId = id;
-    const res = await fetch('/api/admin/support/tickets');
+    const res = await fetch(`${BASE_URL}/api/admin/support/tickets`);
     const tickets = await res.json();
     const ticket = tickets.find(t => t.id === id);
     
@@ -109,7 +111,7 @@ document.getElementById('adminReplyForm').onsubmit = async (e) => {
     if (!message || !currentTicketId) return;
 
     try {
-        const res = await fetch('/api/admin/support/reply', {
+        const res = await fetch(`${BASE_URL}/api/admin/support/reply`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ticketId: currentTicketId, message })
@@ -144,7 +146,7 @@ document.getElementById('addClientForm').onsubmit = async (e) => {
     const password = document.getElementById('addClientPassword').value;
 
     try {
-        const res = await fetch('/api/admin/clients/create', {
+        const res = await fetch(`${BASE_URL}/api/admin/clients/create`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email, password })
@@ -164,7 +166,7 @@ document.getElementById('addClientForm').onsubmit = async (e) => {
 
 async function loadStats() {
     try {
-        const res = await fetch('/api/admin/stats');
+        const res = await fetch(`${BASE_URL}/api/admin/stats`);
         const stats = await res.json();
         
         document.getElementById('stat-total-clients').textContent = stats.totalClients;
@@ -178,7 +180,7 @@ async function loadStats() {
 
 async function loadClients() {
     try {
-        const res = await fetch('/api/admin/clients');
+        const res = await fetch(`${BASE_URL}/api/admin/clients`);
         const clients = await res.json();
         
         renderApprovals(clients.filter(c => c.status === 'pending' || c.status === 'rejected'));
@@ -257,12 +259,12 @@ function renderClients(clients) {
 }
 
 window.approveClient = async (id) => {
-    const res = await fetch(`/api/admin/clients/${id}/approve`, { method: 'POST' });
+    const res = await fetch(`${BASE_URL}/api/admin/clients/${id}/approve`, { method: 'POST' });
     if (res.ok) loadAllData();
 };
 
 window.openClientModal = async (id) => {
-    const res = await fetch('/api/admin/clients');
+    const res = await fetch(`${BASE_URL}/api/admin/clients`);
     const clients = await res.json();
     const client = clients.find(c => c.id === id);
     if (!client) return;
@@ -302,7 +304,7 @@ window.openClientModal = async (id) => {
 
 window.deleteClient = async (id) => {
     if (!confirm('Are you sure you want to PERMANENTLY delete this client and all their documents?')) return;
-    const res = await fetch(`/api/admin/clients/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${BASE_URL}/api/admin/clients/${id}`, { method: 'DELETE' });
     if (res.ok) {
         closeModal();
         loadAllData();
