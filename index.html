@@ -79,7 +79,7 @@
     <script type="module">
         const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-        function toggleAuth() {
+        window.toggleAuth = () => {
             document.getElementById('loginBox').classList.toggle('hidden');
             document.getElementById('registerBox').classList.toggle('hidden');
         }
