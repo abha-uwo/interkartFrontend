@@ -3,85 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interakt Bot Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Login | Whatsabot SaaS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="background-animation"></div>
+<body class="auth-page" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);">
     
-    <div class="container glass-panel">
-        <header>
-            <div class="logo">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <h1>WhatsApp Bot Dashboard</h1>
+    <div class="auth-card" id="loginBox">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div style="width: 56px; height: 56px; background: var(--primary-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--primary);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             </div>
-            <div class="status">
-                <span class="status-indicator active"></span>
-                <span>Bot Active</span>
+            <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em;">Welcome back</h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Login with your Email ID</p>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Email ID</label>
+                <input type="email" id="loginEmail" placeholder="name@company.com" required>
             </div>
-        </header>
-
-        <main>
-            <section class="card">
-                <h2>Interakt Configuration</h2>
-                <p class="subtitle">Connect your Interakt account to enable WhatsApp automation.</p>
-                
-                <form id="configForm">
-                    <div class="form-group">
-                        <label for="apiKey">Interakt API Key</label>
-                        <input type="password" id="apiKey" placeholder="Enter your Base64 Encoded API Key" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Webhook URL (Copy this to Interakt Dashboard)</label>
-                        <div class="copy-field">
-                            <input type="text" id="webhookUrl" value="https://wabot-b.onrender.com/webhook/interakt" readonly>
-                            <button type="button" id="copyBtn" class="btn-icon">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-primary">Save Configuration</button>
-                </form>
-                <div id="alertMessage" class="alert hidden"></div>
-            </section>
-
-            <section class="card auto-replies">
-                <div class="card-header">
-                    <h2>Auto-Reply Rules</h2>
-                    <button class="btn-secondary btn-sm" id="addRuleBtn">+ Add Rule</button>
-                </div>
-                
-                <div class="rules-list">
-                    <div class="rule-item">
-                        <div class="rule-content">
-                            <span class="keyword">"hello", "hi"</span>
-                            <span class="arrow">→</span>
-                            <span class="reply">"Hi there! How can I assist you today?"</span>
-                        </div>
-                        <button class="btn-icon-danger">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    </div>
-                    <div class="rule-item">
-                        <div class="rule-content">
-                            <span class="keyword">"pricing"</span>
-                            <span class="arrow">→</span>
-                            <span class="reply">"Our pricing starts at $9.99/month..."</span>
-                        </div>
-                        <button class="btn-icon-danger">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            </section>
-        </main>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.875rem;">
+                Sign In
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.875rem; color: var(--text-muted);">
+            Don't have an account? <a href="#" onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; text-decoration: none;">Create one now</a>
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <div class="auth-card hidden" id="registerBox">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div style="width: 56px; height: 56px; background: var(--success-light); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--success);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+            </div>
+            <h2 style="font-size: 1.75rem; font-weight: 800; letter-spacing: -0.025em;">Get Started</h2>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Verify your email to join</p>
+        </div>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Business Name</label>
+                <input type="text" id="regName" placeholder="Acme Inc." required>
+            </div>
+            <div class="form-group">
+                <label>Email ID</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="email" id="regEmail" placeholder="name@company.com" required>
+                    <button type="button" class="btn btn-outline btn-sm" id="sendOtpBtn" style="white-space: nowrap;">Send OTP</button>
+                </div>
+            </div>
+            <div class="form-group hidden" id="otpGroup">
+                <label>Verification Code (OTP)</label>
+                <input type="text" id="regOtp" placeholder="6-digit code">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="regPassword" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="regSubmitBtn" style="width: 100%; justify-content: center; padding: 0.875rem; opacity: 0.5;" disabled>
+                Complete Registration
+            </button>
+        </form>
+        
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.875rem; color: var(--text-muted);">
+            Already have an account? <a href="#" onclick="toggleAuth()" style="color: var(--primary); font-weight: 700; text-decoration: none;">Log in</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleAuth() {
+            document.getElementById('loginBox').classList.toggle('hidden');
+            document.getElementById('registerBox').classList.toggle('hidden');
+        }
+
+        // Login Handler
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    localStorage.setItem('clientId', data.id);
+                    localStorage.setItem('clientName', data.name);
+                    
+                    if (data.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'dashboard.html';
+                    }
+                } else {
+                    alert(data.error || 'Login failed');
+                }
+            } catch (err) {
+                alert('Connection error. Is the server running?');
+            }
+        };
+
+        // Send OTP Handler
+        document.getElementById('sendOtpBtn').onclick = async () => {
+            const email = document.getElementById('regEmail').value;
+            if (!email) return alert('Please enter email first');
+
+            try {
+                const res = await fetch('/api/auth/send-otp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                if (res.ok) {
+                    alert('OTP Sent! Please check your terminal console.');
+                    document.getElementById('otpGroup').classList.remove('hidden');
+                    document.getElementById('regSubmitBtn').disabled = false;
+                    document.getElementById('regSubmitBtn').style.opacity = "1";
+                    document.getElementById('sendOtpBtn').textContent = "Resend";
+                }
+            } catch (err) {
+                alert('Error sending OTP');
+            }
+        };
+
+        // Register Handler
+        document.getElementById('registerForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const otp = document.getElementById('regOtp').value;
+
+            if (!otp) return alert('Please enter the OTP');
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password, otp })
+                });
+
+                const data = await res.json();
+                if (res.ok) {
+                    alert('Registration successful! Please wait for admin approval.');
+                    location.reload();
+                } else {
+                    alert(data.error || 'Registration failed');
+                }
+            } catch (err) {
+                alert('Connection error');
+            }
+        };
+    </script>
 </body>
 </html>
