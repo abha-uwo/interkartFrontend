@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
+  // Expose env variables to frontend (VITE_ prefix required)
+  define: {
+    __API_BASE__: JSON.stringify(process.env.VITE_API_URL || '')
+  },
   server: {
     port: 5173,
     proxy: {
