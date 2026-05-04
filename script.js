@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wabot-b.onrender.com';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', () => {
     const configForm = document.getElementById('configForm');

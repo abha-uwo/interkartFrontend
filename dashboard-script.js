@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wabot-b.onrender.com';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', () => {
     const clientId = localStorage.getItem('clientId');
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const profileIcon = document.querySelector('#profileLogoPreview svg');
 
         if (url) {
-            const fullUrl = `${url}?t=${new Date().getTime()}`; // Prevent cache
+            const fullUrl = `${BASE_URL}${url}?t=${new Date().getTime()}`; // Prevent cache
             sidebarImg.src = fullUrl;
             sidebarImg.classList.remove('hidden');
             sidebarIcon.classList.add('hidden');
@@ -288,7 +288,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="doc-item">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary)"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    <a href="/api/client/${clientId}/documents/${doc}" target="_blank" style="font-size: 0.875rem; font-weight: 600; color: var(--text-main); text-decoration: none; cursor: pointer; border-bottom: 1px solid transparent;" onmouseover="this.style.borderBottom='1px solid var(--primary)'" onmouseout="this.style.borderBottom='1px solid transparent'">${doc}</a>
+                    <a href="${BASE_URL}/api/client/${clientId}/documents/${doc}" target="_blank" style="font-size: 0.875rem; font-weight: 600; color: var(--text-main); text-decoration: none; cursor: pointer; border-bottom: 1px solid transparent;" onmouseover="this.style.borderBottom='1px solid var(--primary)'" onmouseout="this.style.borderBottom='1px solid transparent'">${doc}</a>
                 </div>
                 <button class="btn btn-outline btn-sm" style="color: var(--danger); border-color: transparent;" onclick="deleteDoc('${doc}')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>

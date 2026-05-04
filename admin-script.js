@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wabot-b.onrender.com';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadAllData();
@@ -220,7 +220,7 @@ function renderClients(clients) {
             <div style="padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <div style="width: 40px; height: 40px; border-radius: 10px; background: var(--primary-light); overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                        ${client.logoUrl ? `<img src="${client.logoUrl}" style="width: 100%; height: 100%; object-fit: cover;">` : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>'}
+                        ${client.logoUrl ? `<img src="${BASE_URL}${client.logoUrl}" style="width: 100%; height: 100%; object-fit: cover;">` : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>'}
                     </div>
                     <div>
                         <h3 style="font-size: 1.125rem; font-weight: 700;">${client.name}</h3>
