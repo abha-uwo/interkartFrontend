@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
         knowledge: document.getElementById('view-knowledge'),
         golive: document.getElementById('view-golive'),
         profile: document.getElementById('view-profile'),
-        support: document.getElementById('view-support')
+        support: document.getElementById('view-support'),
+        livechats: document.getElementById('view-livechats')
     };
     
     const navs = {
@@ -37,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
         knowledge: document.getElementById('nav-knowledge'),
         golive: document.getElementById('nav-golive'),
         profile: document.getElementById('nav-profile'),
-        support: document.getElementById('nav-support')
+        support: document.getElementById('nav-support'),
+        livechats: document.getElementById('nav-livechats')
     };
 
     window.showView = (viewName) => {
@@ -66,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
             welcomeText.textContent = "Customer Support";
             pageDescription.textContent = "Chat directly with the platform administrators.";
             loadSupportMessages();
+        } else if (viewName === 'livechats') {
+            welcomeText.textContent = "Live WhatsApp Chats";
+            pageDescription.textContent = "View real-time conversations between the bot and customers.";
+            loadLiveChats();
         }
     };
 
@@ -118,6 +124,61 @@ document.addEventListener('DOMContentLoaded', () => {
             loadSupportMessages();
         }
     }, 10000);
+
+    // Live WhatsApp Chats System
+    let currentChatPhone = null;
+
+    async function loadLiveChats() {
+        try {
+            const res = await fetch(`${BASE_URL}/api/client/${clientId}/chats`);
+            const allChats = await res.json();
+            renderCustomerList(allChats);
+            if (currentChatPhone && allChats[currentChatPhone]) {
+                renderLiveMessages(allChats[currentChatPhone]);
+            }
+        } catch (err) { console.error('Error loading live chats:', err); }
+    }
+
+    function renderCustomerList(allChats) {
+        const container = document.getElementById('chatCustomerList');
+        const phones = Object.keys(allChats);
+        if (phones.length === 0) {
+            container.innerHTML = '<p style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.875rem;">No conversations yet.</p>';
+            return;
+        }
+        container.innerHTML = phones.map(phone => `
+            <div class="chat-item ${phone === currentChatPhone ? 'active' : ''}" onclick="selectChat('${phone}')" style="padding: 1.25rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: all 0.2s;">
+                <div style="font-weight: 700; color: var(--text-main);">${phone}</div>
+                <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Last active: ${new Date(allChats[phone][allChats[phone].length-1].timestamp).toLocaleTimeString()}</div>
+            </div>
+        `).join('');
+    }
+
+    window.selectChat = async (phone) => {
+        currentChatPhone = phone;
+        document.getElementById('liveChatHeader').textContent = `Chat with ${phone}`;
+        const res = await fetch(`${BASE_URL}/api/client/${clientId}/chats`);
+        const allChats = await res.json();
+        renderLiveMessages(allChats[phone]);
+        loadLiveChats(); // Refresh list to show active state
+    };
+
+    function renderLiveMessages(messages) {
+        const container = document.getElementById('liveChatMessages');
+        container.innerHTML = messages.map(m => `
+            <div style="align-self: ${m.sender === 'bot' ? 'flex-end' : 'flex-start'}; max-width: 80%; padding: 12px 16px; border-radius: 16px; background: ${m.sender === 'bot' ? 'var(--primary)' : '#ffffff'}; color: ${m.sender === 'bot' ? '#ffffff' : 'var(--text-main)'}; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: ${m.sender === 'customer' ? '1px solid var(--border)' : 'none'};">
+                <div style="font-size: 0.9375rem; font-weight: ${m.sender === 'bot' ? '500' : '400'};">${m.text}</div>
+                <div style="font-size: 0.7rem; margin-top: 4px; opacity: 0.7; text-align: right;">${m.sender.toUpperCase()} • ${new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            </div>
+        `).join('');
+        container.scrollTop = container.scrollHeight;
+    }
+
+    setInterval(() => {
+        if (!views.livechats.classList.contains('hidden')) {
+            loadLiveChats();
+        }
+    }, 5000);
 
     async function loadClientData() {
         try {
