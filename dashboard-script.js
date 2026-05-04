@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('sidebarClientName').textContent = clientName;
     document.getElementById('welcomeText').textContent = `Overview`;
-    document.getElementById('webhookUrl').value = `${window.location.origin}/webhook/interakt/${clientId}`;
+    document.getElementById('webhookUrl').value = `${BASE_URL}/webhook/interakt/${clientId}`;
 
     const whatsappInput = document.getElementById('whatsappNumber');
     const interaktInput = document.getElementById('interaktKey');
