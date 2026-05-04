@@ -165,10 +165,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderLiveMessages(messages) {
         const container = document.getElementById('liveChatMessages');
+        if (messages.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">No messages in this conversation.</p>';
+            return;
+        }
         container.innerHTML = messages.map(m => `
-            <div style="align-self: ${m.sender === 'bot' ? 'flex-end' : 'flex-start'}; max-width: 80%; padding: 12px 16px; border-radius: 16px; background: ${m.sender === 'bot' ? 'var(--primary)' : '#ffffff'}; color: ${m.sender === 'bot' ? '#ffffff' : 'var(--text-main)'}; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: ${m.sender === 'customer' ? '1px solid var(--border)' : 'none'};">
-                <div style="font-size: 0.9375rem; font-weight: ${m.sender === 'bot' ? '500' : '400'};">${m.text}</div>
-                <div style="font-size: 0.7rem; margin-top: 4px; opacity: 0.7; text-align: right;">${m.sender.toUpperCase()} • ${new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+            <div style="display: flex; flex-direction: column; align-items: ${m.sender === 'bot' ? 'flex-end' : 'flex-start'}; gap: 4px;">
+                <div style="max-width: 80%; padding: 12px 16px; border-radius: 18px; 
+                    ${m.sender === 'bot' 
+                        ? 'background: var(--primary); color: white; border-bottom-right-radius: 4px;' 
+                        : 'background: white; color: var(--text-main); border-bottom-left-radius: 4px; border: 1px solid var(--border);'
+                    }; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                    <div style="font-size: 0.9375rem; line-height: 1.5;">${m.text}</div>
+                </div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); padding: 0 4px;">
+                    ${m.sender === 'bot' ? '🤖 AI Bot' : '👤 Customer'} • ${new Date(m.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                </div>
             </div>
         `).join('');
         container.scrollTop = container.scrollHeight;
