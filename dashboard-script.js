@@ -197,8 +197,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch(`${BASE_URL}/api/client/${clientId}`);
             const data = await response.json();
 
-            whatsappInput.value = data.whatsappNumber || '';
-            interaktInput.value = data.apiKey || '';
+            // Pre-fill inputs from server data
+            whatsappInput.value = data.whatsappNumber || localStorage.getItem('backup_whatsapp') || '';
+            interaktInput.value = data.apiKey || localStorage.getItem('backup_apiKey') || '';
             document.getElementById('profileDisplayName').value = data.name;
             
             updateLogos(data.logoUrl);
@@ -381,6 +382,9 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         });
         if (res.ok) {
+            // Backup to localStorage
+            localStorage.setItem('backup_whatsapp', whatsappInput.value);
+            localStorage.setItem('backup_apiKey', interaktInput.value);
             alert('Settings saved!');
             loadClientData();
         }
